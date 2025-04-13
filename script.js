@@ -28,45 +28,30 @@ function createBoard() {
 }
 
 function createKeyboard() {
-  const keys1 = "qwertyuiop".split("");
-  const keyboard1 = document.getElementById("keyboard1");
-  keyboard1.innerHTML = "";
-  keys1.forEach((k) => {
-    const key = document.createElement("button");
-    key.textContent = k;
-    key.classList.add("key");
-    key.addEventListener("click", () => handleKey(k));
-    keyboard1.appendChild(key);
-  });
-  const del = document.createElement("button");
-  del.textContent = "Del";
-  del.classList.add("key");
-  del.addEventListener("click", () => handleKey("Backspace"));
-  keyboard1.appendChild(del);
-  const keys2 = "asdfghjkl".split("");
-  const keyboard2 = document.getElementById("keyboard2");
-  keyboard2.innerHTML = "";
-  keys2.forEach((k) => {
-    const key = document.createElement("button");
-    key.textContent = k;
-    key.classList.add("key");
-    key.addEventListener("click", () => handleKey(k));
-    keyboard2.appendChild(key);
-  });
-  const enter = document.createElement("button");
-  enter.textContent = "Enter";
-  enter.classList.add("key");
-  enter.addEventListener("click", () => handleKey("Enter"));
-  keyboard2.appendChild(enter);
-  const keys3 = "zxcvbnm".split("");
-  const keyboard3 = document.getElementById("keyboard3");
-  keyboard3.innerHTML = "";
-  keys3.forEach((k) => {
-    const key = document.createElement("button");
-    key.textContent = k;
-    key.classList.add("key");
-    key.addEventListener("click", () => handleKey(k));
-    keyboard3.appendChild(key);
+  const keyboardLayout = {
+    row1: "qwertyuiop".split("").concat("Del"),
+    row2: "asdfghjkl".split("").concat("Enter"),
+    row3: "zxcvbnm".split(""),
+  };
+  const keyboardSection = document.getElementById("keyboard-section");
+  keyboardSection.innerHTML = "";
+
+  Object.values(keyboardLayout).forEach((rowKeys) => {
+    const row = document.createElement("div");
+    row.classList.add("keyboard");
+
+    rowKeys.forEach((k) => {
+      const key = document.createElement("button");
+      key.textContent = k;
+      key.classList.add("key");
+      key.addEventListener("click", () => {
+        if (k === "Del") handleKey("Backspace");
+        else handleKey(k);
+      });
+
+      row.appendChild(key);
+    });
+    keyboardSection.appendChild(row);
   });
 }
 
