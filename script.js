@@ -6,7 +6,7 @@ let targetWord = "";
 let validWords = [];
 let previousGuesses = [];
 
-const word = wordlist[Math.trunc(Math.random * wordlist.length)];
+let word = wordlist[Math.trunc(Math.random() * wordlist.length)];
 
 function createBoard() {
   const boardEl = document.getElementById("board");
