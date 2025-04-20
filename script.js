@@ -134,7 +134,7 @@ function checkGuess(guess) {
 function updateKeyboardColors(letter, status) {
   const keys = document.querySelectorAll(".key");
   keys.forEach((k) => {
-    if (k.textContent.toLocaleLowerCase() === k) {
+    if (k.textContent.toLocaleLowerCase() === letter) {
       k.classList.remove("correct", "present", "absent");
       k.classList.add(status);
     }
