@@ -131,6 +131,16 @@ function checkGuess(guess) {
   }
 }
 
+function updateKeyboardColors(letter, status) {
+  const keys = document.querySelectorAll(".key");
+  keys.forEach((k) => {
+    if (k.textContent.toLocaleLowerCase() === k) {
+      k.classList.remove("correct", "present", "absent");
+      k.classList.add(status);
+    }
+  });
+}
+
 function showMessage(msg) {
   document.getElementById("message").textContent = msg;
   setTimeout(() => {
@@ -138,6 +148,19 @@ function showMessage(msg) {
   }, 2000);
 }
 
+function restartGame() {
+  currentRow = 0;
+  currentCol = 0;
+  gameOver = false;
+  previousGuesses = [];
+  document.getElementById("restart").style.display = "none";
+  document.getElementById("message").textContent = "";
+  targetWord = wordlist[Math.trunc(Math.random() * wordlist.length)];
+  createBoard();
+  createKeyboard();
+}
+
+document.getElementById("restart").addEventListener("click", restartGame);
 createBoard();
 createKeyboard();
 window.addEventListener("keydown", (e) => handleKey(e.key));
