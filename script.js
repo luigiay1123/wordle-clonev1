@@ -6,7 +6,7 @@ let targetWord = "";
 let validWords = [];
 let previousGuesses = [];
 
-let word = wordlist[Math.trunc(Math.random() * wordlist.length)];
+targetWord = wordlist[Math.trunc(Math.random() * wordlist.length)];
 
 function createBoard() {
   const boardEl = document.getElementById("board");
@@ -64,14 +64,70 @@ function handleKey(key) {
     }
   } else if (key === "Enter") {
     if (currentCol === 5) {
-      currentRow++;
-      currentCol = 0;
+      const guess = board[currentRow]
+        .map((t) => t.textContent)
+        .join("")
+        .toLowerCase();
+      if (!wordlist.includes(guess)) {
+        showMessage("Invalid word");
+        return;
+      }
+      if (previousGuesses.includes(guess)) {
+        showMessage("Word already guessed");
+        return;
+      }
+      previousGuesses.push(guess);
+      checkGuess(guess);
     } else {
       showMessage("Not enough letters");
     }
   } else if (/^[a-zA-Z]$/.test(key) && currentCol < 5) {
     board[currentRow][currentCol].textContent = key;
     currentCol++;
+  }
+}
+
+function checkGuess(guess) {
+  if (guess.length !== 5) return;
+  const row = board[currentRow];
+  const letterCount = {};
+
+  for (let l of targetWord) {
+    letterCount[l] = (letterCount[l] || 0) + 1;
+  }
+
+  for (let i = 0; i < 5; i++) {
+    if (guess[i] === targetWord[i]) {
+      row[i].classList.add("correct");
+      updateKeyboardColors(guess[i], "correct");
+      letterCount[guess[i]]--;
+    }
+  }
+
+  for (let i = 0; i < 5; i++) {
+    if (!row[i].classList.contains("correct")) {
+      if (targetWord.includes(guess[i]) && letterCount[guess[i]] > 0) {
+        row[i].classList.add("present");
+        updateKeyboardColors(guess[i], "present");
+        letterCount[guess[i]]--;
+      } else {
+        row[i].classList.add("absent");
+        updateKeyboardColors(guess[i], "absent");
+      }
+    }
+  }
+
+  if (guess === targetWord) {
+    showMessage("You win");
+    gameOver = true;
+    document.getElementById("restart").style.display = "inline-block";
+  } else if (currentRow === 5) {
+    showMessage(`The word was: ${targetWord}`);
+    gameOver = true;
+    document.getElementById("restart").style.display = "inline-block";
+  } else {
+    currentRow++;
+    currentCol = 0;
   }
 }
 
